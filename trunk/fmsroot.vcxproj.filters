@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="bisection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="bracket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -30,6 +27,24 @@
     <ClInclude Include="quadratic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ensure.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ulp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="secant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bisect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="error_nan.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="zhang.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -39,6 +54,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="tnewton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tbisect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tbracket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tquadratic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tzhang.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

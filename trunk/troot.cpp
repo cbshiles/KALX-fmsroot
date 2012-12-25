@@ -1,11 +1,11 @@
 // troot.cpp - test root finding routines
 #include <functional>
-#include "../xllfloat/ulp.h"
-#include "bisection.h"
-#include "bracket.h"
-#include "newton.h"
+#include "root.h"
+//#include "bisection.h"
+//#include "bracket.h"
+//#include "newton.h"
 
-using namespace root::_1d;
+using namespace root;
 
 void
 fms_test_same_sign(void)

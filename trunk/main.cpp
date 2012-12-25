@@ -1,15 +1,27 @@
 // main.cpp
 #include <iostream>
+#include <iomanip>
+#include "root.h"
 
-void fms_test_root(void);
-void fms_test_newton(void);
+using namespace std;
+
+void fms_test_bisect(void);
+void fms_test_bracket(void);
+void fms_test_quadratic();
+//void fms_test_root(void);
+//void fms_test_newton(void);
+void fms_test_zhang(void);
 
 int
 main()
 {
 	try {
-		fms_test_root();
-		fms_test_newton();
+		fms_test_bisect();
+		fms_test_bracket();
+		fms_test_quadratic();
+//		fms_test_root();
+//		fms_test_newton();
+		fms_test_zhang();
 	}
 	catch (const std::exception ex) {
 		std::cerr << ex.what() << std::endl;

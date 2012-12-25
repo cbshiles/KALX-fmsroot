@@ -1,20 +1,21 @@
 // newton.h - Newton method of finding roots.
+// Copyright (c) 2012 KALX, LLC. All rights reserved. No warranty is made.
 #pragma once
-#include <array>
 #include "root.h"
 #include "quadratic.h"
 
 namespace root {
 namespace _1d {
 
+	// linear interpolation
 	template<class T>
-	inline T newton(const T& x, const T& f, const T& df)
+	inline T newton(T x, T f, T df)
 	{
 		return x - f/df;
 	}
-
+	// quadratic interpolation
 	template<class T>
-	inline T newton(const T& x, const T& f, T df, const T& ddf)
+	inline T newton(T x, T f, T df, T ddf)
 	{
 		T a = ddf/2;
 		T b = df - x*ddf;
@@ -23,23 +24,33 @@ namespace _1d {
 		return same_sign(f, df) ? quadratic(a, b, c).second : quadratic(a, b, c).first;
 	}
 	template<class T>
-	inline T newton(const T& x, const T* f)
+	inline T newton(T x, const T* f)
 	{
-		T a = f[2]/2;
-		T b = f[1] - x*f[2];
-		T c = f[0] - x*f[1] + x*x*f[2]/2;
-
-		return same_sign(f, df) ? quadratic(a, b, c).second : quadratic(a, b, c).first;
+		return newton(x, f[0], f[1], f[2]);
 	}
-	// for use with dual numbers
-	template<class T>
-	inline T newton_2(const T& x, const T* f)
-	{
-		T a = f[2]/2;
-		T b = f[1] - x*f[2];
-		T c = f[0] - x*f[1] + x*x*f[2];
 
-		return same_sign(f, df) ? quadratic(a, b, c).second : quadratic(a, b, c).first;
+	template<class T, class F, class dF>
+	inline T newton_(T& x, const F& f, const dF& df, typename root::ulp_traits<T>::integer ulps, size_t& iter)
+	{
+		T x_;
+
+		while (iter-- && abs(ulp(x_, x)) > ulps) {
+			x_ = newton(x, f(x), df(x));
+			x = x_;
+		}
+
+		return x_;
+	}
+	template<class T, class F, class dF>
+	inline T newton(T& x, const F& f, const dF& df, typename root::ulp_traits<T>::integer ulps = 0, size_t& iter = std::numeric_limits<size_t>::max())
+	{
+		return newton_(x, f, df, ulps, iter);
+	}
+	// constant slope df
+	template<class T, class F>
+	inline T newton(T& x, const F& f, T df, typename root::ulp_traits<T>::integer ulps = 0, size_t& iter = std::numeric_limits<size_t>::max())
+	{
+		return newton_(x, f, [](T x) { return df; }, ulps, iter);
 	}
 
 } // namespace _1d

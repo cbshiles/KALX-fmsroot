@@ -1,6 +1,7 @@
 // quadratic.h - Real roots of a x^2 + b x + c = 0
 #pragma once
-#include <array>
+#include <cmath>
+#include <utility>
 #include "root.h"
 
 namespace root {
@@ -10,25 +11,23 @@ namespace _1d {
 	inline std::pair<T,T> quadratic(T a, T b, T c)
 	{
 		T x0, x1;
-		T one(static_cast<T>(1));
-		T half(static_cast<T>(0.5));
+		T d = b*b - 4*a*c;
 
 		x0 = x1 = std::numeric_limits<T>::quiet_NaN();
 
 		if (a == 0 && b != 0) {
-			x0 = -c/b;
+			x0 = -b/c;
 		}
 		else {
-			T d = b*b - 4*a*c;
 			if (d > 0) {
 				if (b == 0) {
-					T r = fabs(sqrt(d)/(2*a));
+					T r = static_cast<T>(fabs(0.5*sqrt(d)/a));
 					x0 = -r;
 					x1 = r;
 				}
 				else {
-					T s = b > 0 ? one : -one;
-					T t = -half * (b + s*sqrt(d));
+					T s = static_cast<T>(b > 0 ? 1 : -1);
+					T t = static_cast<T>(-0.5 * (b + s*sqrt(d)));
 					T r1 = t/a;
 					T r2 = c/t;
 					if (r1 < r2) {
@@ -42,11 +41,17 @@ namespace _1d {
 				}
 			}
 			else if (d == 0) {
-				x0 = -half*b/a;
+				x0 = static_cast<T>(-0.5*b/a);
 			}
 		}
 
 		return std::make_pair(x0, x1);
+	}
+
+	template<class T>
+	inline T inverse_quadratic(T x0, T x1, T x2, T y0, T y1, T y2)
+	{
+		return x0*y1*y2/((y0 - y1)*(y0 - y2)) + x1*y2*y1/((y1 - y0)*(y1 - y2)) + x2*y0*y1/((y2 - y0)*(y2 - y1));
 	}
 
 } // namespace _1d

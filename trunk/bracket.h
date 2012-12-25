@@ -1,39 +1,48 @@
 // bracket.h - bracket a root
+// Copyright (c) 2012 KALX, LLC. All rights reserved. No warranty is made.
 #pragma once
-#include <array>
 #include "root.h"
 
 namespace root {
 namespace _1d {
 
-	template<class T>
-	inline std::array<point<T>,2> bracket(const std::function<T(T)>& f, const std::array<point<T>,2>& ab)
+	// bracket root and return slope
+	template<class T, class F>
+	T bracket_(T& x0, T& x1, const F& f, T& a, size_t& iter)
 	{
-		T a = ab[0].x;
-		T fa = ab[0].y;
-		T b = ab[1].x;
-		T fb = ab[1].y;
-		T dx = b - a;
+		T dx = x1 - x0;
+		T f0 = f(x0);
+		T f1 = f(x1);
 
-		ensure (dx > 0);
-		ensure (same_sign(fa, fb));
+		while (iter-- && same_sign(f0, f1)) {
 
-		if ((fa > 0 && fa > fb) || (fa < 0 && fa < fb)) {
-			a = b;
-			fa = fb;
-			b = b + 2*dx;
-			fb = f(b);
+			if (_copysign(f1 - f0, f0) > 0 ) {
+				if (a == 0)
+					a = f0/(f1 - f0);
+				x1 = x0;
+				f1 = f0;
+				x0 = x0 - a*dx;
+				f0 = f(x0);
+			}
+			else {
+				if (a == 0)
+					a = f1/(f0 - f1);
+				x0 = x1;
+				f0 = f1;
+				x1 = x1 + a*dx;
+				f1 = f(x1);
+			}
+
+			dx = x1 - x0;
 		}
-		else {
-			b = a;
-			fb = fa;
-			a = a - 2*dx;
-			fa = f(a);
-		}
-
-		std::array<point<T>,2> ab_ = {point<T>(a,fa),point<T>(b,fb)};
 		
-		return ab_;
+		return (f1 - f0)/dx;
+	}
+
+	template<class T, class F>
+	T bracket(T& x0, T& x1, const F& f, T a = 0, size_t iter = std::numeric_limits<size_t>::max())
+	{
+		return bracket_(x0, x1, f, a, iter);
 	}
 
 } // namespace _1d
