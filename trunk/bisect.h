@@ -1,5 +1,5 @@
 // bisection.h - bisection method of finding roots
-// Copyright (c) 2012 KALX, LLC. All rights reserved. No warranty is made.
+// Copyright (c) 2012-2013 KALX, LLC. All rights reserved. No warranty is made
 #pragma once
 #include "root.h"
 

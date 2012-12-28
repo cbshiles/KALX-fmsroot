@@ -1,5 +1,5 @@
 // ulp.h - units in the last place
-// Copyright (c) 2006-2011 KALX, LLC. All rights reserved. No warranty is made.
+// Copyright (c) 2006-2013 KALX, LLC. All rights reserved. No warranty is made.
 #pragma once
 
 static_assert(sizeof(float) == sizeof(long),
