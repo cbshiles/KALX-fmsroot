@@ -14,6 +14,7 @@ namespace root {
 	// possbile error codes for rootfinding functions
 	enum root_error_code {
 		ROOT_SAME_SIGN = 1, // must start with bracketed values
+		ROOT_NOT_LESS_THAN, // ordinates not increasing
 	};
 
 	template<class T>

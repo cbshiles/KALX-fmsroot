@@ -1,5 +1,5 @@
 // ensure.h - works like assert, but throws an exception
-// Copyright (c) 2006 KALX, LLC. All rights reserved. No warranty is made.
+// Copyright (c) 2006-2013 KALX, LLC. All rights reserved. No warranty is made.
 //
 // #define ensure(x)
 // before including to turn ensure checking off

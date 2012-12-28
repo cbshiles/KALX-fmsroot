@@ -8,7 +8,7 @@ namespace _1d {
 
 	// bracket root and return slope
 	template<class T, class F>
-	T bracket_(T& x0, T& x1, const F& f, T& a, size_t& iter)
+	inline T bracket_(T& x0, T& x1, const F& f, T& a, size_t& iter)
 	{
 		T dx = x1 - x0;
 		T f0 = f(x0);
@@ -16,17 +16,21 @@ namespace _1d {
 
 		while (iter-- && same_sign(f0, f1)) {
 
-			if (_copysign(f1 - f0, f0) > 0 ) {
-				if (a == 0)
-					a = f0/(f1 - f0);
+			if (same_sign(f1 - f0, f0)) {
+				if (a == 0) {
+					a = (f1 - f0)/f0;
+					a = a < 1.6 ? static_cast<T>(.6) : 1/a;
+				}
 				x1 = x0;
 				f1 = f0;
 				x0 = x0 - a*dx;
 				f0 = f(x0);
 			}
 			else {
-				if (a == 0)
-					a = f1/(f0 - f1);
+				if (a == 0) {
+					a = (f0 - f1)/f1;
+					a = a < 1.6 ? static_cast<T>(.6) : 1/a;
+				}
 				x0 = x1;
 				f0 = f1;
 				x1 = x1 + a*dx;
@@ -40,7 +44,7 @@ namespace _1d {
 	}
 
 	template<class T, class F>
-	T bracket(T& x0, T& x1, const F& f, T a = 0, size_t iter = std::numeric_limits<size_t>::max())
+	inline T bracket(T& x0, T& x1, const F& f, T a = 0, size_t iter = std::numeric_limits<size_t>::max())
 	{
 		return bracket_(x0, x1, f, a, iter);
 	}

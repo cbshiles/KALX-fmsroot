@@ -42,9 +42,6 @@
     <ClInclude Include="error_nan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="zhang.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -65,7 +62,7 @@
     <ClCompile Include="tquadratic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tzhang.cpp">
+    <ClCompile Include="tsecant.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

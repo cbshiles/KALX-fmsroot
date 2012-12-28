@@ -1,34 +1,40 @@
 // tnewton.cpp - test Newton root finding
+#include "ensure.h"
 #include "newton.h"
-#include "../fmsdual/dual.h"
+//#include "../fmsdual/dual.h"
 
-using namespace dual;
+//using namespace dual;
 using namespace root::_1d;
 
 template<class T>
-void
-fms_test_square_root(void)
+void test_newton(void)
 {
-	size_t n;
-	T a = 2;
-	std::function<T(T)> F = [a](T x) { return x*x - a; };
-	T x(1), x_, f, df;
+	T eps = std::numeric_limits<T>::epsilon();
+	T x = 1, x_;
+	T a = 2., b = 3.;
 
-	n = 0;
-	do {
-		++n;
-		f = F(x);
-		df = 2*x;
-		x_ = newton(x, f, df);
-	} while (fabs(f) > sqrt(std::numeric_limits<T>::epsilon()) && (x = x_));
+	auto f = [a,b](T x) { return a + b*x; };
+	x_ = newton(2*a, f(2*a), b);
+	ensure (fabs(x_ + a/b) <= 2*eps);
 
-	x_ = newton<T>(1, F(1), 2, 2).second;
-	ensure (fabs(F(x_)) < 10*std::numeric_limits<T>::epsilon());
+	auto F = [](T x) { return x*x - 2; };
+	auto dF = [](T x) { return 2*x; };
+	size_t iter = 10;
+
+	x_ = newton(2*a, F(2*a), dF(2*a), a);
+	ensure (fabs(x_ - sqrt(2.)) <= eps);
+
+	x_ = newton_(x, F, dF, iter, 10); // oscillates if ulps = 0
+	ensure (fabs(x_ - sqrt(2.)) <= eps);
+
+	x = 5;
+	x_ = newton(x, F, dF, 100, 2); // oscillates if ulps = 0
+	ensure (fabs(x_ - sqrt(2.)) <= eps);
 }
 
 void
 fms_test_newton(void)
 {
-//	fms_test_square_root<float>();
-	fms_test_square_root<double>();
+	test_newton<double>();
+	test_newton<float>();
 }

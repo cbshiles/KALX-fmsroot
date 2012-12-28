@@ -1,7 +1,7 @@
 // troot.cpp - test root finding routines
 #include <functional>
 #include "root.h"
-//#include "bisection.h"
+//#include "bisect.h"
 //#include "bracket.h"
 //#include "newton.h"
 

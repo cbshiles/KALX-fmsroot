@@ -33,10 +33,10 @@ void test_bracket(void)
 	ensure (!same_sign(F(x0), F(x1)));
 	ensure (fabs(m - (F(x1) - F(x0))/(x1 - x0)) <= eps);
 
-	x0 = 2; x1 = 3;
 	auto G = [](T x) { return 2 - x*x; };
-	m = _1d::bracket<T>(x0, x1, G, 0);
 
+	x0 = 2; x1 = 3;
+	m = _1d::bracket<T>(x0, x1, G, 0);
 	ensure (!same_sign(G(x0), G(x1)));
 	ensure (fabs(m - (G(x1) - G(x0))/(x1 - x0)) <= eps);
 
@@ -44,6 +44,13 @@ void test_bracket(void)
 	m = _1d::bracket<T>(x0, x1, G, 0);
 	ensure (!same_sign(G(x0), G(x1)));
 	ensure (fabs(m - (G(x1) - G(x0))/(x1 - x0)) <= eps);
+
+
+	auto H = [eps](T x) { return x*x - eps; };
+	x0 = -1; x1 = 1; 
+	T a = 0;
+	size_t iter = 100;
+	m = _1d::bracket_<T>(x0, x1, H, a, iter);
 }
 
 void fms_test_bracket(void)

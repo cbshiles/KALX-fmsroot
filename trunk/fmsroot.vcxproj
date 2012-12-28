@@ -85,20 +85,17 @@
     <ClInclude Include="root.h" />
     <ClInclude Include="secant.h" />
     <ClInclude Include="ulp.h" />
-    <ClInclude Include="zhang.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="tbisect.cpp" />
     <ClCompile Include="tbracket.cpp" />
-    <ClCompile Include="tnewton.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="tnewton.cpp" />
     <ClCompile Include="tquadratic.cpp" />
     <ClCompile Include="troot.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="tzhang.cpp" />
+    <ClCompile Include="tsecant.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

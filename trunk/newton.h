@@ -30,27 +30,21 @@ namespace _1d {
 	}
 
 	template<class T, class F, class dF>
-	inline T newton_(T& x, const F& f, const dF& df, typename root::ulp_traits<T>::integer ulps, size_t& iter)
+	inline T newton_(T& x, const F& f, const dF& df, size_t& iter, typename root::ulp_traits<T>::integer ulps)
 	{
-		T x_;
+		T x_(x);
 
-		while (iter-- && abs(ulp(x_, x)) > ulps) {
-			x_ = newton(x, f(x), df(x));
+		do {
 			x = x_;
-		}
+			x_ = newton(x, f(x), df(x));
+		} while (iter-- && abs(ulp(x_, x)) > ulps);
 
 		return x_;
 	}
 	template<class T, class F, class dF>
-	inline T newton(T& x, const F& f, const dF& df, typename root::ulp_traits<T>::integer ulps = 0, size_t& iter = std::numeric_limits<size_t>::max())
+	inline T newton(T x, const F& f, const dF& df, size_t iter = std::numeric_limits<size_t>::max(), typename root::ulp_traits<T>::integer ulps = 0)
 	{
-		return newton_(x, f, df, ulps, iter);
-	}
-	// constant slope df
-	template<class T, class F>
-	inline T newton(T& x, const F& f, T df, typename root::ulp_traits<T>::integer ulps = 0, size_t& iter = std::numeric_limits<size_t>::max())
-	{
-		return newton_(x, f, [](T x) { return df; }, ulps, iter);
+		return newton_(x, f, df, iter, ulps);
 	}
 
 } // namespace _1d

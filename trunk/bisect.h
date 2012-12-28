@@ -1,4 +1,4 @@
-// bisection.h - bisection method of finding roots
+// bisect.h - bisection method of finding roots
 // Copyright (c) 2012-2013 KALX, LLC. All rights reserved. No warranty is made
 #pragma once
 #include "root.h"
@@ -7,7 +7,7 @@ namespace root {
 namespace _1d {
 
 	template<class T, class F>
-	inline T bisect_(T x0, T x1, const F& f, typename root::ulp_traits<T>::integer ulps, size_t& iter)
+	inline T bisect_(T x0, T x1, const F& f, size_t& iter, typename root::ulp_traits<T>::integer ulps)
 	{
 		T f0 = f(x0);
 		T f1 = f(x1);
@@ -36,9 +36,9 @@ namespace _1d {
 	}
 
 	template<class T, class F>
-	inline T bisect(T x0, T x1, const F& f, typename root::ulp_traits<T>::integer ulps = 0, size_t iter = std::numeric_limits<size_t>::max())
+	inline T bisect(T x0, T x1, const F& f, size_t iter = std::numeric_limits<size_t>::max(), typename root::ulp_traits<T>::integer ulps = 0)
 	{
-		return bisect_(x0, x1, f, ulps, iter);
+		return bisect_(x0, x1, f, iter, ulps);
 	}
 
 } // namespace _1d

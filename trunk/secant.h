@@ -1,4 +1,5 @@
 // secant.h - secant method of finding roots
+// Copyright (c) 2012 KALX, LLC. All rights reserved. No warranty is made.
 #pragma once
 #include <array>
 #include "root.h"
@@ -7,10 +8,11 @@ namespace root {
 namespace _1d {
 
 	template<class T>
-	inline T inverse_secant(T x0, T x1, T y0, T y1)
+	inline T inverse_secant(T x0, T y0, T x1, T y1)
 	{
 		return x1 - y1*(x1 - x0)/(y1 - y0);
 	}
+
 
 	template<class T, class F>
 	inline T secant_(T& x0, T& x1, const F& f, typename root::ulp_traits<T>::integer ulps, size_t& iter)
@@ -30,7 +32,7 @@ namespace _1d {
 	}
 
 	template<class T, class F>
-	inline T secant(T& x0, T& x1, const F& f, typename root::ulp_traits<T>::integer ulps = 0, size_t iter = std::numeric_limits<size_t>::max())
+	inline T secant(T x0, T x1, const F& f, typename root::ulp_traits<T>::integer ulps = 0, size_t iter = std::numeric_limits<size_t>::max())
 	{
 		return secant_(x0, x1, f, ulps, iter);
 	}

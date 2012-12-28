@@ -1,4 +1,5 @@
 // quadratic.h - Real roots of a x^2 + b x + c = 0
+// Copyright (c) 2012 KALX, LLC. All rights reserved. No warranty is made.
 #pragma once
 #include <cmath>
 #include <utility>
@@ -6,6 +7,12 @@
 
 namespace root {
 namespace _1d {
+
+	template<class T>
+	inline T inverse_quadratic(T x0, T y0, T x1, T y1, T x2, T y2)
+	{
+		return x0*y1*y2/((y0 - y1)*(y0 - y2)) + x1*y2*y0/((y1 - y0)*(y1 - y2)) + x2*y0*y1/((y2 - y0)*(y2 - y1));
+	}
 
 	template<class T>
 	inline std::pair<T,T> quadratic(T a, T b, T c)
@@ -46,12 +53,6 @@ namespace _1d {
 		}
 
 		return std::make_pair(x0, x1);
-	}
-
-	template<class T>
-	inline T inverse_quadratic(T x0, T x1, T x2, T y0, T y1, T y2)
-	{
-		return x0*y1*y2/((y0 - y1)*(y0 - y2)) + x1*y2*y1/((y1 - y0)*(y1 - y2)) + x2*y0*y1/((y2 - y0)*(y2 - y1));
 	}
 
 } // namespace _1d
