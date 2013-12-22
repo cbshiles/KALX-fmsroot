@@ -1,7 +1,7 @@
 // root1d.h - One dimensional root finding
 #pragma once
 #include <algorithm>
-//#include <functional>
+#include <functional>
 #include <limits>
 #include <deque>
 
@@ -77,11 +77,34 @@ namespace fms {
 			if (_isnan(y0))
 				y0 = f(x0);
 			y.push_front(y0);
+
+			best();
+		}
+		void replace(X x0, X y0 = std::numeric_limits<X>::quiet_NaN())
+		{
+			x[0] = x0;
+			if (_isnan(y0))
+				y0 = f(x0);
+			y[0] = y0;
+
+			best();
+		}
+		// ensure i-th estimate better than i+1-st
+		void best(size_t i = 0)
+		{
+			if (size() > i + 1 && fabs(y[i]) > fabs(y[i + 1])) {
+				std::swap(x[i], x[i + 1]);
+				std::swap(y[i], y[i + 1]);
+			}
 		}
 
+		static bool bracketed(const X& y0, const X& y1)
+		{
+			return std::signbit(y0) != std::signbit(y1);
+		}
 		bool bracketed() const
 		{
-			return y.size() < 2 ? false : y[0]*y[1] < 0;
+			return y.size() < 2 ? false : bracketed(y[0], y[1]);
 		}
 		
 		// returns abcissa
@@ -102,15 +125,13 @@ namespace fms {
 			else
 				push(2*x[1] - x[0]);
 
-			if (y[1] != y[2]) {
+			if (!bracketed() && y[1] != y[2]) {
 				// maybe secant is better
-				X x_ = step1d::secant(x[1], y[1], x[2], y[2]);
-				X y_ = f(x_);
+				X x0 = step1d::secant(x[1], y[1], x[2], y[2]);
+				X y0 = f(x0);
 
-				if (fabs(y_) < fabs(y[0])) {
-					x[0] = x_;
-					y[0] = y_;
-				}
+				if (fabs(y0) < fabs(y[0]))
+					replace(x0, y0);
 			}
 
 			return bracket();
@@ -141,7 +162,7 @@ namespace fms {
 		{
 			ensure (size() > 1);
 
-			X min_ = x[0]*x[1] < 0 ? 0 : (std::min)(fabs(x[0]), fabs(x[1]));
+			X min_ = bracketed(x[0], x[1]) ? 0 : (std::min)(fabs(x[0]), fabs(x[1]));
 
 			return fabs(x[0] - x[1]) < abs + rel*min_; 
 		}
@@ -176,6 +197,8 @@ namespace fms {
 				std::swap(y[1], y[2]);
 
 				ensure (bracketed());
+
+				best();
 			}
 		}
 		void newton(const X& m = 0)
@@ -197,14 +220,31 @@ namespace fms {
 
 			push(step1d::inverse_quadratic(x[0], y[0], x[1], y[1], x[2], y[2]));
 		}
-		/*
-		// done
-		// step
-		const X& brent()
+
+		// e.g., done = [eps,&r](void) { return r.residual(eps); }
+		void brent(const std::function<bool(void)>& done)
 		{
-			return 0;
+			while (!done()) {
+				X x0, y0;
+
+				bisect();
+				x0 = x[0];
+				y0 = y[0];
+
+				secant();
+				if (fabs(y0) < fabs(y[0]))
+					replace(x0, y0);
+
+				if (size() > 2) {
+					x0 = x[0];
+					y0 = y[0];
+
+					inverse_quadratic();
+					if (fabs(y0) < fabs(y[0]))
+						replace(x0, y0);
+				}
+			}
 		}
-		*/
 
 	}; // root1d
 } // fms
