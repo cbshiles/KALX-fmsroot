@@ -9,6 +9,11 @@ using namespace fms;
 
 void test_step1d(void)
 {
+	ensure (step1d::bracket0(-1.,1.));
+	ensure (step1d::bracket0(1.,-1.));
+	ensure (!step1d::bracket0(-1.,-1.));
+	ensure (!step1d::bracket0(1.,1.));
+
 	double x0 = 1, y0 = 2, x1 = 3, y1 = 4;
 
 	ensure (step1d::bisect(x0, x1) == (x0 + x1)/2);
@@ -39,36 +44,32 @@ void test_root1d(void)
 	test_step1d();
 
 	size_t n;
-	root1d<double> r([](const double& x) { return x*x - 2; });
+	root1d<double> r([](const double& x) { return x*x - 5; });
 
-	r.bracket(1, .1);
+	r.push(1.);
+	bool better;
+	while (!r.residual(1e-11))
+		better = r.improve(.1);
 	n = r.size();
-	double eps = 1e-8;
-	while (!r.residual(eps)) {
-		r.secant();
-	}
-	n = r.size();
-	ensure (fabs(r.y[0]) < eps);
 
 	r.clear();
-	r.bracket(2, .0001);
+	double x0;
+	x0 = r.solve(1, .1, [&r]() { return r.residual(1e-11); });
+	ensure (fabs(r.y[0]) < 1e-11);
 	n = r.size();
-	double delta = 1e-15;
-	while (!r.delta(delta)) {
-		r.secant();
-	}
-	n = r.size();
-	ensure (fabs(r.x[0] - r.x[1]) < delta);
-
-	root1d<double> r2([](const double& x) { return x*x - 2; }, [](const double& x) { return 2*x; });
-	r2.bracket(1,.1);
-	n = r2.size();
-	while (!r2.residual(eps))
-		r2.newton();
-	n = r2.size();
 
 	r.clear();
-	r.bracket(1, 0.1);
-	r.brent([eps,&r]() { return r.residual(eps); });
-	ensure (fabs(r.y[0]) < eps);
+	x0 = r.solve(2, .1, [&r]() { return r.residual(1e-11); });
+	ensure (fabs(r.y[0]) < 1e-11);
+	n = r.size();
+
+	r.clear();
+	x0 = r.solve(1, .01, [&r]() { return r.residual(1e-11); });
+	ensure (fabs(r.y[0]) < 1e-11);
+	n = r.size();
+
+	r.clear();
+	x0 = r.solve(10, .1, [&r]() { return r.residual(1e-11); });
+	ensure (fabs(r.y[0]) < 1e-11);
+	n = r.size();
 }
